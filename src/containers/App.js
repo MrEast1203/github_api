@@ -31,7 +31,7 @@ function App() {
               </StyledPaper>
             }
           />
-          <Route path="/issue" element={<IssuePage />} />
+          <Route path="/issue/:id" element={<IssuePage />} />
         </Routes>
       </Wrapper>
     </Router>

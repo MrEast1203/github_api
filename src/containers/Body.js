@@ -1,15 +1,12 @@
 import * as React from "react";
-import ListItemButton from "@mui/material/ListItemButton";
 import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import Typography from "@mui/material/Typography";
-import SquareIcon from "@mui/icons-material/Square";
 import { useState, useRef, useCallback, useEffect } from "react";
 import InfiniteLoadComponent from "../components/InfiniteLoadComponent";
 import { useNavigate } from "react-router-dom";
-const openColor = "#808080";
-const progressColor = "#FF0033";
-const doneColor = "#4BB543";
+import ListButton from "../components/ListButton";
+// const openColor = "#808080";
+// const progressColor = "#FF0033";
+// const doneColor = "#4BB543";
 
 const testData = [
   {
@@ -89,24 +86,40 @@ export default function IssueList() {
   ///scroll
   const node = useRef();
   const { isBottom } = useDetectScrolledToBottom(node);
-  console.log("isBottom:: ", isBottom);
+  // console.log("isBottom:: ", isBottom);
   /////////
 
   ///route
   const navigate = useNavigate();
-  const ToIssuePage = () => {
-    navigate("/issue");
+  const ToIssuePage = (id) => {
+    // console.log("data", data);
+    navigate(`/issue/${id}`, {
+      state: data,
+    });
   };
   ////////
   const [arr, setArr] = useState(testData);
-  const addData = () => {
-    const data = {
-      title: "Problem 11",
-      body: "The Body of Problem 3",
-      status: "Done",
-    };
-    setArr((prev) => [...prev, data]);
+  const [id, setId] = useState(0);
+  const [data, setData] = useState({});
+  const [isChangePage, setIsChangePage] = useState(false);
+
+  useEffect(() => {
+    setIsChangePage(false);
+    if (isChangePage) ToIssuePage(id);
+  }, [isChangePage]);
+
+  const ListItemButton = ({ data, index, setData, setId, setIsChangePage }) => {
+    return (
+      <ListButton
+        data={data}
+        index={index}
+        setData={setData}
+        setId={setId}
+        setIsChangePage={setIsChangePage}
+      />
+    );
   };
+
   return (
     <InfiniteLoadComponent
       sx={{
@@ -120,38 +133,13 @@ export default function IssueList() {
         <ListItem
           key={index}
           sx={{ pt: "4px", pb: "4px", pl: "8px", pr: "8px" }}>
-          <ListItemButton onClick={ToIssuePage}>
-            <ListItemText
-              primary={
-                <div style={{ display: "flex" }}>
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    {data.title}
-                  </Typography>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}>
-                    <Typography variant="body2" component="div">
-                      {data.status}
-                    </Typography>
-                    <SquareIcon
-                      fontSize="small"
-                      sx={{
-                        color:
-                          data.status === "Open"
-                            ? openColor
-                            : data.status === "In Progress"
-                            ? progressColor
-                            : doneColor,
-                      }}
-                    />
-                  </div>
-                </div>
-              }
-            />
-          </ListItemButton>
+          <ListItemButton
+            data={data}
+            index={index}
+            setData={setData}
+            setId={setId}
+            setIsChangePage={setIsChangePage}
+          />
         </ListItem>
       ))}
     </InfiniteLoadComponent>

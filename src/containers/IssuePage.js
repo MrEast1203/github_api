@@ -11,8 +11,15 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Stack } from "@mui/system";
 import Chip from "@mui/material/Chip";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const IssuePage = () => {
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  console.log(state);
+  const ToList = () => {
+    navigate("/");
+  };
   return (
     <Card sx={{ width: 600, p: "1em" }}>
       <Stack
@@ -42,7 +49,7 @@ const IssuePage = () => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton>
+        <IconButton onClick={ToList}>
           <ArrowBackIcon />
         </IconButton>
       </CardActions>
