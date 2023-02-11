@@ -12,13 +12,22 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Stack } from "@mui/system";
 import Chip from "@mui/material/Chip";
 import { useNavigate, useLocation } from "react-router-dom";
+import EDMenu from "../components/EDMenu";
 
 const IssuePage = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  console.log(state);
   const ToList = () => {
     navigate("/");
+  };
+  const { title, body, status } = state;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openEDMenu = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
   return (
     <Card sx={{ width: 600, p: "1em" }}>
@@ -27,10 +36,13 @@ const IssuePage = () => {
         justifyContent="space-around"
         alignItems="center"
         spacing={"80%"}>
-        <Chip label="Open" />
-        <IconButton>
-          <MoreVertIcon />
-        </IconButton>
+        <Chip label={status} />
+        <div>
+          <IconButton onClick={handleClick}>
+            <MoreVertIcon />
+          </IconButton>
+          <EDMenu anchorEl={anchorEl} open={openEDMenu} onClose={handleClose} />
+        </div>
       </Stack>
       <CardHeader
         avatar={
@@ -38,14 +50,12 @@ const IssuePage = () => {
             R
           </Avatar>
         }
-        title="Shrimp and Chorizo Paella"
+        title={title}
         titleTypographyProps={{ fontSize: 20 }}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          {body}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
