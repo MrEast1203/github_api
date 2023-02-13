@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import instance from "../api";
 
 const ListContext = createContext({
   //data
@@ -11,6 +12,7 @@ const ListContext = createContext({
   setFiltedIssueArr: () => {},
   setOpenEditModal: () => {},
   setDataForEdit: () => {},
+  setRerender: () => {},
 });
 
 const ListProvider = (props) => {
@@ -73,6 +75,50 @@ const ListProvider = (props) => {
   const [dataForEdit, setDataForEdit] = useState({});
   //function
 
+  //init
+  const [rerender, setRerender] = useState(false);
+  useEffect(() => {
+    const urlSearch = window.location.search;
+    const urlParams = new URLSearchParams(urlSearch);
+    const code = urlParams.get("code");
+    console.log("🚀 ~ file: useList.js:81 ~ useEffect ~ code", code);
+
+    // local storage
+    if (code && localStorage.getItem("accessToken") === null) {
+      async function getAccessToken() {
+        await instance
+          .get("getAccessToken", {
+            params: {
+              code: code,
+            },
+          })
+          .then(({ data }) => {
+            console.log("🚀 ~ file: useList.js:95 ~ data", data);
+            if (data.access_token) {
+              localStorage.setItem("accessToken", data.access_token);
+              setRerender(!rerender);
+            }
+          })
+          .catch((err) => {
+            console.log("🚀 ~ file: useList.js:104 ~ .then ~ err", err);
+          });
+      }
+      getAccessToken();
+    }
+  }, []);
+
+  const getUserData = async () => {
+    await instance
+      .get("getUserData", {
+        headers: {
+          Authorization: "Bearer" + localStorage.getItem("accessToken"),
+        },
+      })
+      .then(({ data }) => {
+        console.log("🚀 ~ file: useList.js:115 ~ getUserData ~ data", data);
+      });
+  };
+
   return (
     <ListContext.Provider
       value={{
@@ -84,6 +130,7 @@ const ListProvider = (props) => {
         setFiltedIssueArr,
         setOpenEditModal,
         setDataForEdit,
+        setRerender,
       }}
       {...props}
     />

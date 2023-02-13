@@ -7,11 +7,9 @@ import { ListProvider } from "./hooks/useList";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <ListProvider>
-      <App />
-    </ListProvider>
-  </React.StrictMode>
+  <ListProvider>
+    <App />
+  </ListProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
