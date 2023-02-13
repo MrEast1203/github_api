@@ -13,6 +13,8 @@ import { Stack } from "@mui/system";
 import Chip from "@mui/material/Chip";
 import { useNavigate, useLocation } from "react-router-dom";
 import EDMenu from "../components/EDMenu";
+import EditModal from "../components/EditModal";
+import { useList } from "../hooks/useList";
 
 const IssuePage = () => {
   const navigate = useNavigate();
@@ -29,6 +31,13 @@ const IssuePage = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const { openEditModal, setOpenEditModal, dataForEdit } = useList();
+
+  const Edit = ({ open, onClose, data }) => {
+    return <EditModal open={open} onClose={onClose} data={data} />;
+  };
+
   return (
     <Card sx={{ width: 600, p: "1em" }}>
       <Stack
@@ -41,7 +50,13 @@ const IssuePage = () => {
           <IconButton onClick={handleClick}>
             <MoreVertIcon />
           </IconButton>
-          <EDMenu anchorEl={anchorEl} open={openEDMenu} onClose={handleClose} />
+          <EDMenu
+            anchorEl={anchorEl}
+            open={openEDMenu}
+            onClose={handleClose}
+            data={state}
+            ToList={ToList}
+          />
         </div>
       </Stack>
       <CardHeader
@@ -63,6 +78,11 @@ const IssuePage = () => {
           <ArrowBackIcon />
         </IconButton>
       </CardActions>
+      <Edit
+        open={openEditModal}
+        onClose={() => setOpenEditModal(false)}
+        data={dataForEdit}
+      />
     </Card>
   );
 };

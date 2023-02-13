@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, AppBar, Toolbar, Typography, IconButton } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import FilterMenu from "../components/FilterMenu";
+import LoginIcon from "@mui/icons-material/Login";
 import { useList } from "../hooks/useList";
 const Header = () => {
   ///Filter
@@ -41,13 +42,12 @@ const Header = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
+          <IconButton size="large" edge="start" color="inherit">
+            <LoginIcon />
+          </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Issue List
+            Please Login First
           </Typography>
-          {/* <Typography variant="h6" component="div">
-            {isOpen ? "true" : "false"}, {isInProgress ? "true" : "false"},{" "}
-            {isDone ? "true" : "false"}
-          </Typography> */}
           <div>
             <IconButton
               size="large"

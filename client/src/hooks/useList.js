@@ -4,9 +4,13 @@ const ListContext = createContext({
   //data
   issueArr: [],
   filtedIssueArr: [],
+  openEditModal: false,
+  dataForEdit: {},
   //function
   setIssueArr: () => {},
   setFiltedIssueArr: () => {},
+  setOpenEditModal: () => {},
+  setDataForEdit: () => {},
 });
 
 const ListProvider = (props) => {
@@ -27,7 +31,6 @@ const ListProvider = (props) => {
       body: "The Body of Problem 3",
       status: "Done",
     },
-    ,
     {
       title: "Problem 4",
       body: "The Body of Problem 3",
@@ -66,11 +69,22 @@ const ListProvider = (props) => {
   ];
   const [issueArr, setIssueArr] = useState(testData);
   const [filtedIssueArr, setFiltedIssueArr] = useState(testData);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [dataForEdit, setDataForEdit] = useState({});
   //function
 
   return (
     <ListContext.Provider
-      value={{ issueArr, filtedIssueArr, setIssueArr, setFiltedIssueArr }}
+      value={{
+        issueArr,
+        filtedIssueArr,
+        openEditModal,
+        dataForEdit,
+        setIssueArr,
+        setFiltedIssueArr,
+        setOpenEditModal,
+        setDataForEdit,
+      }}
       {...props}
     />
   );
