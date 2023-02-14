@@ -7,12 +7,15 @@ const ListContext = createContext({
   filtedIssueArr: [],
   openEditModal: false,
   dataForEdit: {},
+  repoInfo: {},
   //function
   setIssueArr: () => {},
   setFiltedIssueArr: () => {},
   setOpenEditModal: () => {},
   setDataForEdit: () => {},
   setRerender: () => {},
+  setRepoInfo: () => {},
+  getIssue: () => {},
 });
 
 const ListProvider = (props) => {
@@ -73,7 +76,38 @@ const ListProvider = (props) => {
   const [filtedIssueArr, setFiltedIssueArr] = useState(testData);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [dataForEdit, setDataForEdit] = useState({});
+  const [repoInfo, setRepoInfo] = useState({});
   //function
+  const getUserData = async () => {
+    await instance
+      .get("getUserData", {
+        headers: {
+          Authorization: "Bearer" + localStorage.getItem("accessToken"),
+        },
+      })
+      .then(({ data }) => {
+        console.log("🚀 ~ file: useList.js:115 ~ getUserData ~ data", data);
+      });
+  };
+
+  const getIssue = async () => {
+    await instance
+      .get("getIssue", {
+        params: {
+          owner: repoInfo.owner,
+          repo: repoInfo.repo,
+        },
+        headers: {
+          Authorization: "Beare " + localStorage.getItem("accessToken"),
+        },
+      })
+      .then(({ data }) => {
+        console.log("🚀 ~ file: useList.js:102 ~ getIssue ~ data", data);
+      })
+      .catch((err) => {
+        console.log("🚀 ~ file: useList.js:104 ~ getIssue ~ err", err);
+      });
+  };
 
   //init
   const [rerender, setRerender] = useState(false);
@@ -107,18 +141,6 @@ const ListProvider = (props) => {
     }
   }, []);
 
-  const getUserData = async () => {
-    await instance
-      .get("getUserData", {
-        headers: {
-          Authorization: "Bearer" + localStorage.getItem("accessToken"),
-        },
-      })
-      .then(({ data }) => {
-        console.log("🚀 ~ file: useList.js:115 ~ getUserData ~ data", data);
-      });
-  };
-
   return (
     <ListContext.Provider
       value={{
@@ -126,11 +148,14 @@ const ListProvider = (props) => {
         filtedIssueArr,
         openEditModal,
         dataForEdit,
+        repoInfo,
         setIssueArr,
         setFiltedIssueArr,
         setOpenEditModal,
         setDataForEdit,
         setRerender,
+        setRepoInfo,
+        getIssue,
       }}
       {...props}
     />

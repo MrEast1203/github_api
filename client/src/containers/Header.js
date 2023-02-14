@@ -5,6 +5,9 @@ import FilterMenu from "../components/FilterMenu";
 import LoginIcon from "@mui/icons-material/Login";
 import { useList } from "../hooks/useList";
 import LogoutIcon from "@mui/icons-material/Logout";
+import EditIcon from "@mui/icons-material/Edit";
+import RepoModal from "../components/RepoModal";
+import GetAppIcon from "@mui/icons-material/GetApp";
 const Header = () => {
   ///Filter
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -15,13 +18,18 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  ////////
   const [isOpen, setIsOpen] = useState(true);
   const [isInProgress, setIsInProgress] = useState(true);
   const [isDone, setIsDone] = useState(true);
 
-  const { filtedIssueArr, setFiltedIssueArr, issueArr, setRerender } =
-    useList();
+  const {
+    filtedIssueArr,
+    setFiltedIssueArr,
+    issueArr,
+    setRerender,
+    repoInfo,
+    getIssue,
+  } = useList();
 
   const filterArr = () => {
     if (issueArr) {
@@ -39,10 +47,11 @@ const Header = () => {
   useEffect(() => {
     if (filtedIssueArr) setFiltedIssueArr(filterArr());
   }, [isOpen, isInProgress, isDone]);
+  ////////
 
   const loginURL = "https://github.com/login/oauth/authorize";
   const CLIENT_ID = "c30221ea25480ba9a220";
-  const scope = "repo+user";
+  const scope = "repo";
   const loginGithub = () => {
     if (!localStorage.getItem("accessToken")) {
       window.location.assign(
@@ -53,6 +62,8 @@ const Header = () => {
       setRerender((prev) => !prev);
     }
   };
+
+  const [openRepoModal, setOpenRepoModal] = useState(false);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -72,6 +83,31 @@ const Header = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {!localStorage.getItem("accessToken") ? "Please login" : "Wellcome"}
           </Typography>
+          <Typography variant="h6" component="div" sx={{ mr: 2 }}>
+            {repoInfo.owner !== undefined && repoInfo.repo !== undefined
+              ? `Owner: ${repoInfo.owner}, Repo: ${repoInfo.repo}`
+              : "Enter your repo"}
+          </Typography>
+          <div>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              onClick={() => setOpenRepoModal(true)}>
+              <EditIcon />
+            </IconButton>
+            <RepoModal
+              open={openRepoModal}
+              onClose={() => setOpenRepoModal(false)}
+            />
+          </div>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            onClick={getIssue}>
+            <GetAppIcon />
+          </IconButton>
           <div>
             <IconButton
               size="large"
