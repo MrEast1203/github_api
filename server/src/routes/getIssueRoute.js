@@ -8,7 +8,7 @@ exports.GetIssue = async (req, res) => {
   const repo = req.query.repo;
   // const repoURL = `${owner}/${repo}`;
   const per_page = "10";
-  const params = `?q=user:${owner}+is:issue+is:open&sort=created&per_page=${per_page}`;
+  const params = `?q=user:${owner}+is:open+is:issue&sort=created&per_page=${per_page}`;
   await fetch(`https://api.github.com/search/issues` + params, {
     method: "GET",
     headers: {

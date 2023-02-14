@@ -98,7 +98,7 @@ const ListProvider = (props) => {
           repo: repoInfo.repo,
         },
         headers: {
-          Authorization: "Beare " + localStorage.getItem("accessToken"),
+          Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       })
       .then(({ data }) => {
