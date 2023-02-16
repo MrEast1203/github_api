@@ -29,15 +29,15 @@ const ListButton = ({ data, index, setData, setId, setIsChangePage }) => {
                 alignItems: "center",
               }}>
               <Typography variant="body2" component="div">
-                {data.status}
+                {data.state}
               </Typography>
               <SquareIcon
                 fontSize="small"
                 sx={{
                   color:
-                    data.status === "Open"
+                    data.state === "open"
                       ? openColor
-                      : data.status === "In Progress"
+                      : data.state === "in progress"
                       ? progressColor
                       : doneColor,
                 }}

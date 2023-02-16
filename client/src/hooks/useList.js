@@ -8,85 +8,42 @@ const ListContext = createContext({
   openEditModal: false,
   dataForEdit: {},
   repoInfo: {},
+  accessToken: "",
   //function
   setIssueArr: () => {},
   setFiltedIssueArr: () => {},
   setOpenEditModal: () => {},
   setDataForEdit: () => {},
-  setRerender: () => {},
   setRepoInfo: () => {},
   getIssue: () => {},
+  setAccessToken: () => {},
+  setUpdateIssue: () => {},
 });
 
 const ListProvider = (props) => {
   //data
-  const testData = [
-    {
-      title: "Problem 1",
-      body: "The Body of Problem 1",
-      status: "Open",
-    },
-    {
-      title: "Problem 2",
-      body: "The Body of Problem 2",
-      status: "In Progress",
-    },
-    {
-      title: "Problem 3",
-      body: "The Body of Problem 3",
-      status: "Done",
-    },
-    {
-      title: "Problem 4",
-      body: "The Body of Problem 3",
-      status: "Done",
-    },
-    {
-      title: "Problem 5",
-      body: "The Body of Problem 3",
-      status: "Done",
-    },
-    {
-      title: "Problem 6",
-      body: "The Body of Problem 3",
-      status: "Done",
-    },
-    {
-      title: "Problem 7",
-      body: "The Body of Problem 3",
-      status: "Done",
-    },
-    {
-      title: "Problem 8",
-      body: "The Body of Problem 3",
-      status: "Done",
-    },
-    {
-      title: "Problem 9",
-      body: "The Body of Problem 3",
-      status: "Done",
-    },
-    {
-      title: "Problem 10",
-      body: "The Body of Problem 3",
-      status: "Done",
-    },
-  ];
-  const [issueArr, setIssueArr] = useState(testData);
-  const [filtedIssueArr, setFiltedIssueArr] = useState(testData);
+
+  const [issueArr, setIssueArr] = useState([]);
+  const [filtedIssueArr, setFiltedIssueArr] = useState([]);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [dataForEdit, setDataForEdit] = useState({});
   const [repoInfo, setRepoInfo] = useState({});
+  const [accessToken, setAccessToken] = useState("");
+  const [user, setUser] = useState("");
+  const [page, setPage] = useState(1);
+  const [updateIssue, setUpdateIssue] = useState(false);
   //function
   const getUserData = async () => {
+    console.log(accessToken);
     await instance
       .get("getUserData", {
         headers: {
-          Authorization: "Bearer" + localStorage.getItem("accessToken"),
+          Authorization: "Bearer " + accessToken,
         },
       })
       .then(({ data }) => {
         console.log("🚀 ~ file: useList.js:115 ~ getUserData ~ data", data);
+        if (user === "") setUser(data.login);
       });
   };
 
@@ -94,15 +51,17 @@ const ListProvider = (props) => {
     await instance
       .get("getIssue", {
         params: {
-          owner: repoInfo.owner,
-          repo: repoInfo.repo,
+          user: user,
+          page: page,
         },
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+          Authorization: "Bearer " + accessToken,
         },
       })
       .then(({ data }) => {
         console.log("🚀 ~ file: useList.js:102 ~ getIssue ~ data", data);
+        if (data.total_count === 10) setPage((prev) => prev + 1);
+        if (!data.message) setIssueArr(data.items);
       })
       .catch((err) => {
         console.log("🚀 ~ file: useList.js:104 ~ getIssue ~ err", err);
@@ -110,15 +69,13 @@ const ListProvider = (props) => {
   };
 
   //init
-  const [rerender, setRerender] = useState(false);
   useEffect(() => {
     const urlSearch = window.location.search;
     const urlParams = new URLSearchParams(urlSearch);
     const code = urlParams.get("code");
     console.log("🚀 ~ file: useList.js:81 ~ useEffect ~ code", code);
 
-    // local storage
-    if (code && localStorage.getItem("accessToken") === null) {
+    if (code && accessToken === "") {
       async function getAccessToken() {
         await instance
           .get("getAccessToken", {
@@ -129,8 +86,7 @@ const ListProvider = (props) => {
           .then(({ data }) => {
             console.log("🚀 ~ file: useList.js:95 ~ data", data);
             if (data.access_token) {
-              localStorage.setItem("accessToken", data.access_token);
-              setRerender(!rerender);
+              setAccessToken(data.access_token);
             }
           })
           .catch((err) => {
@@ -141,6 +97,17 @@ const ListProvider = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (accessToken !== "") {
+      getUserData();
+    }
+  }, [accessToken]);
+  useEffect(() => {
+    if (user !== "") {
+      getIssue();
+    }
+  }, [user, updateIssue]);
+
   return (
     <ListContext.Provider
       value={{
@@ -149,13 +116,15 @@ const ListProvider = (props) => {
         openEditModal,
         dataForEdit,
         repoInfo,
+        accessToken,
         setIssueArr,
         setFiltedIssueArr,
         setOpenEditModal,
         setDataForEdit,
-        setRerender,
         setRepoInfo,
         getIssue,
+        setAccessToken,
+        setUpdateIssue,
       }}
       {...props}
     />

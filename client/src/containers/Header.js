@@ -5,8 +5,6 @@ import FilterMenu from "../components/FilterMenu";
 import LoginIcon from "@mui/icons-material/Login";
 import { useList } from "../hooks/useList";
 import LogoutIcon from "@mui/icons-material/Logout";
-import EditIcon from "@mui/icons-material/Edit";
-import RepoModal from "../components/RepoModal";
 import GetAppIcon from "@mui/icons-material/GetApp";
 const Header = () => {
   ///Filter
@@ -22,22 +20,16 @@ const Header = () => {
   const [isInProgress, setIsInProgress] = useState(true);
   const [isDone, setIsDone] = useState(true);
 
-  const {
-    filtedIssueArr,
-    setFiltedIssueArr,
-    issueArr,
-    setRerender,
-    repoInfo,
-    getIssue,
-  } = useList();
+  const { setFiltedIssueArr, issueArr, getIssue, accessToken, setAccessToken } =
+    useList();
 
   const filterArr = () => {
     if (issueArr) {
       const newArr = issueArr.filter((element) => {
         return (
-          element.status === (isOpen ? "Open" : "") ||
-          element.status === (isInProgress ? "In Progress" : "") ||
-          element.status === (isDone ? "Done" : "")
+          element.state === (isOpen ? "open" : "") ||
+          element.state === (isInProgress ? "in progress" : "") ||
+          element.state === (isDone ? "done" : "")
         );
       });
       return newArr;
@@ -45,25 +37,22 @@ const Header = () => {
     return issueArr;
   };
   useEffect(() => {
-    if (filtedIssueArr) setFiltedIssueArr(filterArr());
-  }, [isOpen, isInProgress, isDone]);
+    setFiltedIssueArr(filterArr());
+  }, [isOpen, isInProgress, isDone, issueArr]);
   ////////
 
   const loginURL = "https://github.com/login/oauth/authorize";
   const CLIENT_ID = "c30221ea25480ba9a220";
-  const scope = "repo";
+  const scope = "repo+read:user";
   const loginGithub = () => {
-    if (!localStorage.getItem("accessToken")) {
+    if (accessToken === "") {
       window.location.assign(
         loginURL + "?client_id=" + CLIENT_ID + "&scope=" + scope
       );
     } else {
-      localStorage.removeItem("accessToken");
-      setRerender((prev) => !prev);
+      setAccessToken("");
     }
   };
-
-  const [openRepoModal, setOpenRepoModal] = useState(false);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -74,33 +63,12 @@ const Header = () => {
             edge="start"
             color="inherit"
             onClick={loginGithub}>
-            {!localStorage.getItem("accessToken") ? (
-              <LoginIcon />
-            ) : (
-              <LogoutIcon />
-            )}
+            {accessToken === "" ? <LoginIcon /> : <LogoutIcon />}
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {!localStorage.getItem("accessToken") ? "Please login" : "Wellcome"}
+            {accessToken === "" ? "Please login" : "Wellcome"}
           </Typography>
-          <Typography variant="h6" component="div" sx={{ mr: 2 }}>
-            {repoInfo.owner !== undefined && repoInfo.repo !== undefined
-              ? `Owner: ${repoInfo.owner}, Repo: ${repoInfo.repo}`
-              : "Enter your repo"}
-          </Typography>
-          <div>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              onClick={() => setOpenRepoModal(true)}>
-              <EditIcon />
-            </IconButton>
-            <RepoModal
-              open={openRepoModal}
-              onClose={() => setOpenRepoModal(false)}
-            />
-          </div>
+
           <IconButton
             size="large"
             edge="start"

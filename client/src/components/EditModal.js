@@ -24,7 +24,7 @@ const style = {
 const EditModal = ({ open, onClose, data }) => {
   const [title, setTitle] = useState(data.title ?? "");
   const [body, setBody] = useState(data.body ?? "");
-  const [status, setStatus] = useState(data.status ?? "");
+  const [state, setState] = useState(data.state ?? "");
 
   const [isTitleEmpty, setIsTitleEmpty] = useState(false);
   const [isBody30, setIsBody30] = useState(false);
@@ -35,8 +35,8 @@ const EditModal = ({ open, onClose, data }) => {
   const handleBodyChange = (e) => {
     setBody(e.target.value);
   };
-  const handleStatusChange = (e) => {
-    setStatus(e.target.value);
+  const handleStateChange = (e) => {
+    setState(e.target.value);
   };
 
   const handleEdit = () => {
@@ -80,18 +80,18 @@ const EditModal = ({ open, onClose, data }) => {
 
         <FormControl sx={{ mb: 2 }}>
           <InputLabel variant="standard" htmlFor="uncontrolled-native">
-            Status
+            State
           </InputLabel>
           <NativeSelect
-            defaultValue={status}
+            defaultValue={state}
             inputProps={{
-              name: "Status",
+              name: "State",
               id: "uncontrolled-native",
             }}
-            onChange={handleStatusChange}>
-            <option value={"Open"}>Open</option>
-            <option value={"In Progress"}>In Progress</option>
-            <option value={"Done"}>Done</option>
+            onChange={handleStateChange}>
+            <option value={"open"}>Open</option>
+            <option value={"in progress"}>In Progress</option>
+            <option value={"done"}>Done</option>
           </NativeSelect>
         </FormControl>
 

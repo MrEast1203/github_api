@@ -4,11 +4,10 @@ dotenv.config();
 
 exports.GetIssue = async (req, res) => {
   const authorization = req.get("Authorization");
-  const owner = req.query.owner;
-  const repo = req.query.repo;
-  // const repoURL = `${owner}/${repo}`;
+  const user = req.query.user;
+  const page = req.query.page;
   const per_page = "10";
-  const params = `?q=user:${owner}+is:open+is:issue&sort=created&per_page=${per_page}`;
+  const params = `?q=user:${user}+is:open+is:issue&sort=created&per_page=${per_page}&page=${page}`;
   await fetch(`https://api.github.com/search/issues` + params, {
     method: "GET",
     headers: {

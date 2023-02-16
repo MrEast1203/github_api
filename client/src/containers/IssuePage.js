@@ -18,11 +18,11 @@ import { useList } from "../hooks/useList";
 
 const IssuePage = () => {
   const navigate = useNavigate();
-  const { state } = useLocation();
+  // const { state } = useLocation();
   const ToList = () => {
     navigate("/");
   };
-  const { title, body, status } = state;
+  const { title, body, state } = useLocation().state;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openEDMenu = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -45,7 +45,7 @@ const IssuePage = () => {
         justifyContent="space-around"
         alignItems="center"
         spacing={"80%"}>
-        <Chip label={status} />
+        <Chip label={state} />
         <div>
           <IconButton onClick={handleClick}>
             <MoreVertIcon />
