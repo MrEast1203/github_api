@@ -1,7 +1,6 @@
 import dotenv from "dotenv-defaults";
+import fetch from "../fetch";
 dotenv.config();
-const fetch = (...args) =>
-  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 exports.GetUserData = async (req, res) => {
   const authorization = req.get("Authorization");

@@ -7,14 +7,12 @@ const ListContext = createContext({
   filtedIssueArr: [],
   openEditModal: false,
   dataForEdit: {},
-  repoInfo: {},
   accessToken: "",
   //function
   setIssueArr: () => {},
   setFiltedIssueArr: () => {},
   setOpenEditModal: () => {},
   setDataForEdit: () => {},
-  setRepoInfo: () => {},
   getIssue: () => {},
   setAccessToken: () => {},
   setUpdateIssue: () => {},
@@ -27,7 +25,6 @@ const ListProvider = (props) => {
   const [filtedIssueArr, setFiltedIssueArr] = useState([]);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [dataForEdit, setDataForEdit] = useState({});
-  const [repoInfo, setRepoInfo] = useState({});
   const [accessToken, setAccessToken] = useState("");
   const [user, setUser] = useState("");
   const [page, setPage] = useState(1);
@@ -60,8 +57,14 @@ const ListProvider = (props) => {
       })
       .then(({ data }) => {
         console.log("🚀 ~ file: useList.js:102 ~ getIssue ~ data", data);
-        if (data.total_count === 10) setPage((prev) => prev + 1);
-        if (!data.message) setIssueArr(data.items);
+        if (data.items.length === 10) setPage((prev) => prev + 1);
+        if (!data.message) {
+          console.log("🚀 ~ file: useList.js:65 ~ .then ~ page", page);
+          if (data.total_count > issueArr.length) {
+            if (page !== 1) setIssueArr((prev) => [...prev, ...data.items]);
+            else setIssueArr(data.items);
+          }
+        }
       })
       .catch((err) => {
         console.log("🚀 ~ file: useList.js:104 ~ getIssue ~ err", err);
@@ -115,13 +118,11 @@ const ListProvider = (props) => {
         filtedIssueArr,
         openEditModal,
         dataForEdit,
-        repoInfo,
         accessToken,
         setIssueArr,
         setFiltedIssueArr,
         setOpenEditModal,
         setDataForEdit,
-        setRepoInfo,
         getIssue,
         setAccessToken,
         setUpdateIssue,

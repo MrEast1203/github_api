@@ -6,6 +6,8 @@ import LoginIcon from "@mui/icons-material/Login";
 import { useList } from "../hooks/useList";
 import LogoutIcon from "@mui/icons-material/Logout";
 import GetAppIcon from "@mui/icons-material/GetApp";
+import AddModal from "../components/AddModal";
+import AddIcon from "@mui/icons-material/Add";
 const Header = () => {
   ///Filter
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -24,6 +26,7 @@ const Header = () => {
     useList();
 
   const filterArr = () => {
+    console.log("🚀 ~ file: Header.js:42 ~ filterArr ~ issueArr", issueArr);
     if (issueArr) {
       const newArr = issueArr.filter((element) => {
         return (
@@ -54,6 +57,14 @@ const Header = () => {
     }
   };
 
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const handleAddModalOpen = () => {
+    setOpenAddModal(true);
+  };
+  const handleAddModalClose = () => {
+    setOpenAddModal(false);
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -76,6 +87,14 @@ const Header = () => {
             onClick={getIssue}>
             <GetAppIcon />
           </IconButton>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            onClick={handleAddModalOpen}>
+            <AddIcon />
+          </IconButton>
+          <AddModal open={openAddModal} onClose={handleAddModalClose} />
           <div>
             <IconButton
               size="large"
