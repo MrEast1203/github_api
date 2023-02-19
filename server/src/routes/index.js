@@ -16,5 +16,6 @@ function main(app) {
   app.get("/getIssue", wrap(getIssueRoute.GetIssue));
   app.get("/addIssue", wrap(addIssueRoute.AddIssue));
   app.get("/editIssue", wrap(editIssueRoute.EditIssue));
+  app.get("/deleteIssue", wrap(editIssueRoute.DeleteIssue));
 }
 export default main;
