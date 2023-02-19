@@ -5,20 +5,8 @@ dotenv.config();
 exports.AddIssue = async (req, res) => {
   const authorization = req.get("Authorization");
   const owner = req.query.owner;
-  console.log(
-    "🚀 ~ file: addIssueRoute.js:8 ~ exports.AddIssue= ~ owner",
-    owner
-  );
   const repo = req.query.repo;
-  console.log(
-    "🚀 ~ file: addIssueRoute.js:10 ~ exports.AddIssue= ~ repo",
-    repo
-  );
   const title = req.query.title;
-  console.log(
-    "🚀 ~ file: addIssueRoute.js:18 ~ exports.AddIssue= ~ title",
-    title
-  );
   const body = req.query.body;
   await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
     method: "POST",
@@ -32,12 +20,12 @@ exports.AddIssue = async (req, res) => {
       return response.json();
     })
     .then((data) => {
-      console.log("🚀 ~ file: getIssueRoute.js:25 ~ .then ~ data", data);
+      console.log("🚀 ~ file: addIssueRoute.js:24 ~ .then ~ data", data);
       res.json(data);
     })
     .catch((err) => {
       console.log(
-        "🚀 ~ file: getIssueRoute.js:28 ~ exports.GetIssue= ~ err",
+        "🚀 ~ file: addIssueRoute.js:27 ~ exports.AddIssue= ~ err",
         err
       );
     });

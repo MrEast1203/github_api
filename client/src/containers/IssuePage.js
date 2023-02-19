@@ -6,7 +6,6 @@ import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Stack } from "@mui/system";
@@ -22,7 +21,7 @@ const IssuePage = () => {
   const ToList = () => {
     navigate("/");
   };
-  const { title, body, state } = useLocation().state;
+  const { title, body, labels, user } = useLocation().state;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openEDMenu = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -32,10 +31,32 @@ const IssuePage = () => {
     setAnchorEl(null);
   };
 
+  const [useTitle, setUseTitle] = React.useState(title);
+  const [useBody, setUseBody] = React.useState(body);
+  const [useLabels, setUseLabels] = React.useState(
+    labels.length === 0 ? "Open" : labels[0].name
+  );
+
   const { openEditModal, setOpenEditModal, dataForEdit } = useList();
 
-  const Edit = ({ open, onClose, data }) => {
-    return <EditModal open={open} onClose={onClose} data={data} />;
+  const Edit = ({
+    open,
+    onClose,
+    data,
+    setUseTitle,
+    setUseBody,
+    setUseLabels,
+  }) => {
+    return (
+      <EditModal
+        open={open}
+        onClose={onClose}
+        data={data}
+        setUseTitle={setUseTitle}
+        setUseBody={setUseBody}
+        setUseLabels={setUseLabels}
+      />
+    );
   };
 
   return (
@@ -45,7 +66,7 @@ const IssuePage = () => {
         justifyContent="space-around"
         alignItems="center"
         spacing={"80%"}>
-        <Chip label={state} />
+        <Chip label={useLabels} />
         <div>
           <IconButton onClick={handleClick}>
             <MoreVertIcon />
@@ -54,23 +75,19 @@ const IssuePage = () => {
             anchorEl={anchorEl}
             open={openEDMenu}
             onClose={handleClose}
-            data={state}
+            data={useLocation().state}
             ToList={ToList}
           />
         </div>
       </Stack>
       <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        title={title}
+        avatar={<Avatar src={user.avatar_url} />}
+        title={useTitle}
         titleTypographyProps={{ fontSize: 20 }}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {body}
+          {useBody}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -82,6 +99,9 @@ const IssuePage = () => {
         open={openEditModal}
         onClose={() => setOpenEditModal(false)}
         data={dataForEdit}
+        setUseTitle={setUseTitle}
+        setUseBody={setUseBody}
+        setUseLabels={setUseLabels}
       />
     </Card>
   );

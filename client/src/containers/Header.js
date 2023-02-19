@@ -26,7 +26,7 @@ const Header = () => {
     useList();
 
   const filterArr = () => {
-    console.log("🚀 ~ file: Header.js:42 ~ filterArr ~ issueArr", issueArr);
+    // console.log("🚀 ~ file: Header.js:42 ~ filterArr ~ issueArr", issueArr);
     if (issueArr) {
       const newArr = issueArr.filter((element) => {
         return (

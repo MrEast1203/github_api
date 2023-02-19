@@ -8,6 +8,9 @@ import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import instance from "../api";
+import { useList } from "../hooks/useList";
+import { useParams } from "react-router-dom";
 
 const style = {
   position: "relative",
@@ -21,13 +24,32 @@ const style = {
   p: 4,
 };
 
-const EditModal = ({ open, onClose, data }) => {
+const EditModal = ({
+  open,
+  onClose,
+  data,
+  setUseTitle,
+  setUseBody,
+  setUseLabels,
+}) => {
   const [title, setTitle] = useState(data.title ?? "");
   const [body, setBody] = useState(data.body ?? "");
-  const [state, setState] = useState(data.state ?? "");
+  const [state, setState] = useState(
+    data.labels
+      ? data.labels.length === 0
+        ? "Open"
+        : data.labels[0].name
+      : "Open"
+  );
 
   const [isTitleEmpty, setIsTitleEmpty] = useState(false);
   const [isBody30, setIsBody30] = useState(false);
+  const url = data.url ?? "https://api.github.com/users/OWNER/REPO/";
+  const owner = new URL(url).pathname.split("/")[2];
+  const repo = new URL(url).pathname.split("/")[3];
+
+  const { accessToken, setIssueArr, issueArr } = useList();
+  const { id } = useParams();
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -49,6 +71,40 @@ const EditModal = ({ open, onClose, data }) => {
       setIsBody30(false);
     }
     //edit api
+    const editIssue = async () => {
+      await instance
+        .get("editIssue", {
+          params: {
+            owner: owner,
+            repo: repo,
+            title: title,
+            body: body,
+            issue_number: data.number,
+            labels: [state],
+          },
+          headers: {
+            Authorization: "Bearer " + accessToken,
+          },
+        })
+        .then(({ data }) => {
+          console.log("🚀 ~ file: AddModal.js:75 ~ addIssue ~ data", data);
+          if (data.message) console.log("Wrong Repo");
+          else {
+            const newArr = [...issueArr];
+            newArr[id] = data;
+            setUseTitle(data.title);
+            setUseBody(data.body);
+            setUseLabels(
+              data.labels.length === 0 ? "Open" : data.labels[0].name
+            );
+            setIssueArr(newArr);
+          }
+        })
+        .catch((err) => {
+          console.log("🚀 ~ file: AddModal.js:79 ~ addIssue ~ err", err);
+        });
+    };
+    editIssue();
     onClose();
   };
   const handleClose = () => {
@@ -89,9 +145,9 @@ const EditModal = ({ open, onClose, data }) => {
               id: "uncontrolled-native",
             }}
             onChange={handleStateChange}>
-            <option value={"open"}>Open</option>
-            <option value={"in progress"}>In Progress</option>
-            <option value={"done"}>Done</option>
+            <option value={"Open"}>Open</option>
+            <option value={"In Progress"}>In Progress</option>
+            <option value={"Done"}>Done</option>
           </NativeSelect>
         </FormControl>
 
