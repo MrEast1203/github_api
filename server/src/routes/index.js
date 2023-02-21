@@ -14,6 +14,7 @@ function main(app) {
   app.get("/getAccessToken", wrap(getAccessTokenRoute.GetAccessToken));
   app.get("/getUserData", wrap(getUserRoute.GetUserData));
   app.get("/getIssue", wrap(getIssueRoute.GetIssue));
+  app.get("/getIssueSearch", wrap(getIssueRoute.GetIssue));
   app.get("/addIssue", wrap(addIssueRoute.AddIssue));
   app.get("/editIssue", wrap(editIssueRoute.EditIssue));
   app.get("/deleteIssue", wrap(editIssueRoute.DeleteIssue));

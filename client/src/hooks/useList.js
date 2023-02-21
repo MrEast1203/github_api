@@ -8,6 +8,7 @@ const ListContext = createContext({
   openEditModal: false,
   dataForEdit: {},
   accessToken: "",
+  searchItem: "",
   //function
   setIssueArr: () => {},
   setFiltedIssueArr: () => {},
@@ -16,6 +17,7 @@ const ListContext = createContext({
   getIssue: () => {},
   setAccessToken: () => {},
   setUpdateIssue: () => {},
+  setSearchItem: () => {},
 });
 
 const ListProvider = (props) => {
@@ -29,6 +31,8 @@ const ListProvider = (props) => {
   const [user, setUser] = useState("");
   const [page, setPage] = useState(1);
   const [updateIssue, setUpdateIssue] = useState(false);
+  const [searchItem, setSearchItem] = useState("");
+  const [pageForSearch, setPageForSearch] = useState(1);
   //function
   const getUserData = async () => {
     console.log(accessToken);
@@ -68,6 +72,34 @@ const ListProvider = (props) => {
       })
       .catch((err) => {
         console.log("🚀 ~ file: useList.js:104 ~ getIssue ~ err", err);
+      });
+  };
+  const getIssueSearch = async () => {
+    await instance
+      .get("getIssue", {
+        params: {
+          user: user,
+          page: pageForSearch,
+          search: searchItem,
+        },
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      })
+      .then(({ data }) => {
+        console.log("🚀 ~ file: useList.js:102 ~ getIssueSearch ~ data", data);
+        if (data.items.length === 10) setPageForSearch((prev) => prev + 1);
+        if (!data.message) {
+          console.log("🚀 ~ file: useList.js:65 ~ .then ~ page", page);
+          if (data.total_count > issueArr.length) {
+            if (pageForSearch !== 1)
+              setIssueArr((prev) => [...prev, ...data.items]);
+            else setIssueArr(data.items);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log("🚀 ~ file: useList.js:104 ~ getIssueSearch ~ err", err);
       });
   };
 
@@ -119,6 +151,7 @@ const ListProvider = (props) => {
         openEditModal,
         dataForEdit,
         accessToken,
+        searchItem,
         setIssueArr,
         setFiltedIssueArr,
         setOpenEditModal,
@@ -126,6 +159,7 @@ const ListProvider = (props) => {
         getIssue,
         setAccessToken,
         setUpdateIssue,
+        setSearchItem,
       }}
       {...props}
     />

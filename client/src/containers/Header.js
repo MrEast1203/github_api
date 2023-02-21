@@ -8,6 +8,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import AddModal from "../components/AddModal";
 import AddIcon from "@mui/icons-material/Add";
+import SearchBar from "../components/SearchBar";
 const Header = () => {
   ///Filter
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -22,26 +23,45 @@ const Header = () => {
   const [isInProgress, setIsInProgress] = useState(true);
   const [isDone, setIsDone] = useState(true);
 
-  const { setFiltedIssueArr, issueArr, getIssue, accessToken, setAccessToken } =
-    useList();
+  const {
+    setFiltedIssueArr,
+    issueArr,
+    getIssue,
+    accessToken,
+    setAccessToken,
+    searchItem,
+  } = useList();
 
   const filterArr = () => {
     // console.log("🚀 ~ file: Header.js:42 ~ filterArr ~ issueArr", issueArr);
     if (issueArr) {
       const newArr = issueArr.filter((element) => {
-        return (
-          element.state === (isOpen ? "open" : "") ||
-          element.state === (isInProgress ? "in progress" : "") ||
-          element.state === (isDone ? "done" : "")
-        );
+        return element.labels.length === 0
+          ? isOpen
+          : element.labels[0].name === (isOpen ? "Open" : "") ||
+            element.labels.length === 0
+          ? true
+          : element.labels[0].name === (isInProgress ? "In Progress" : "") ||
+            element.labels.length === 0
+          ? true
+          : element.labels[0].name === (isDone ? "Done" : "");
       });
-      return newArr;
+      if (searchItem === "") return newArr;
+      else {
+        const newArr2 = newArr.filter((element) => {
+          return (
+            element.title.includes(searchItem) ||
+            element.body.includes(searchItem)
+          );
+        });
+        return newArr2;
+      }
     }
     return issueArr;
   };
   useEffect(() => {
     setFiltedIssueArr(filterArr());
-  }, [isOpen, isInProgress, isDone, issueArr]);
+  }, [isOpen, isInProgress, isDone, issueArr, searchItem]);
   ////////
 
   const loginURL = "https://github.com/login/oauth/authorize";
@@ -116,6 +136,7 @@ const Header = () => {
               setIsDone={setIsDone}
             />
           </div>
+          <SearchBar />
         </Toolbar>
       </AppBar>
     </Box>
