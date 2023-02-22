@@ -14,10 +14,7 @@ exports.GetUserData = async (req, res) => {
       return response.json();
     })
     .then((data) => {
-      console.log(
-        "🚀 ~ file: getUserRoute.js:17 ~ exports.GetUserData= ~ data",
-        data
-      );
+      // console.log("🚀 ~ file: getUserRoute.js:17 ~ exports.GetUserData= ~ data",data);
       res.json(data);
     })
     .catch((err) => {

@@ -20,7 +20,7 @@ exports.AddIssue = async (req, res) => {
       return response.json();
     })
     .then((data) => {
-      console.log("🚀 ~ file: addIssueRoute.js:24 ~ .then ~ data", data);
+      // console.log("🚀 ~ file: addIssueRoute.js:24 ~ .then ~ data", data);
       res.json(data);
     })
     .catch((err) => {

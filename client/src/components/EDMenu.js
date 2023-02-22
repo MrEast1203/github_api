@@ -63,10 +63,7 @@ const EDMenu = ({ anchorEl, open, onClose, data, ToList }) => {
                 },
               })
               .then(({ data }) => {
-                console.log(
-                  "🚀 ~ file: AddModal.js:75 ~ addIssue ~ data",
-                  data
-                );
+                // console.log("🚀 ~ file: AddModal.js:75 ~ addIssue ~ data",data);
                 if (data.message) console.log("Wrong Repo");
                 else {
                   const newArr = [...issueArr];

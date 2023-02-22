@@ -12,10 +12,6 @@ exports.GetAccessToken = async (req, res) => {
     process.env.CLIENT_SECRETS +
     "&code=" +
     code;
-  console.log(
-    "🚀 ~ file: getAccessTokenRoute.js:8 ~ exports.GetAccessToken= ~ params",
-    params
-  );
   await fetch(AccessTokenURL + params, {
     method: "POST",
     headers: {
@@ -26,7 +22,7 @@ exports.GetAccessToken = async (req, res) => {
       return response.json();
     })
     .then((data) => {
-      console.log("🚀 ~ file: getAccessTokenRoute.js:31 ~ .then ~ data", data);
+      // console.log("🚀 ~ file: getAccessTokenRoute.js:31 ~ .then ~ data", data);
       res.json(data);
     })
     .catch((err) => {

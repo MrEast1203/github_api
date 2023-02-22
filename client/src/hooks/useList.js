@@ -35,7 +35,7 @@ const ListProvider = (props) => {
   const [pageForSearch, setPageForSearch] = useState(1);
   //function
   const getUserData = async () => {
-    console.log(accessToken);
+    // console.log(accessToken);
     await instance
       .get("getUserData", {
         headers: {
@@ -43,7 +43,7 @@ const ListProvider = (props) => {
         },
       })
       .then(({ data }) => {
-        console.log("🚀 ~ file: useList.js:115 ~ getUserData ~ data", data);
+        // console.log("🚀 ~ file: useList.js:115 ~ getUserData ~ data", data);
         if (user === "") setUser(data.login);
       });
   };
@@ -60,10 +60,10 @@ const ListProvider = (props) => {
         },
       })
       .then(({ data }) => {
-        console.log("🚀 ~ file: useList.js:102 ~ getIssue ~ data", data);
+        // console.log("🚀 ~ file: useList.js:102 ~ getIssue ~ data", data);
         if (data.items.length === 10) setPage((prev) => prev + 1);
         if (!data.message) {
-          console.log("🚀 ~ file: useList.js:65 ~ .then ~ page", page);
+          // console.log("🚀 ~ file: useList.js:65 ~ .then ~ page", page);
           if (data.total_count > issueArr.length) {
             if (page !== 1) setIssueArr((prev) => [...prev, ...data.items]);
             else setIssueArr(data.items);
@@ -71,7 +71,7 @@ const ListProvider = (props) => {
         }
       })
       .catch((err) => {
-        console.log("🚀 ~ file: useList.js:104 ~ getIssue ~ err", err);
+        // console.log("🚀 ~ file: useList.js:104 ~ getIssue ~ err", err);
       });
   };
   const getIssueSearch = async () => {
@@ -87,10 +87,10 @@ const ListProvider = (props) => {
         },
       })
       .then(({ data }) => {
-        console.log("🚀 ~ file: useList.js:102 ~ getIssueSearch ~ data", data);
+        // console.log("🚀 ~ file: useList.js:102 ~ getIssueSearch ~ data", data);
         if (data.items.length === 10) setPageForSearch((prev) => prev + 1);
         if (!data.message) {
-          console.log("🚀 ~ file: useList.js:65 ~ .then ~ page", page);
+          // console.log("🚀 ~ file: useList.js:65 ~ .then ~ page", page);
           if (data.total_count > issueArr.length) {
             if (pageForSearch !== 1)
               setIssueArr((prev) => [...prev, ...data.items]);
@@ -108,7 +108,7 @@ const ListProvider = (props) => {
     const urlSearch = window.location.search;
     const urlParams = new URLSearchParams(urlSearch);
     const code = urlParams.get("code");
-    console.log("🚀 ~ file: useList.js:81 ~ useEffect ~ code", code);
+    // console.log("🚀 ~ file: useList.js:81 ~ useEffect ~ code", code);
 
     if (code && accessToken === "") {
       async function getAccessToken() {
@@ -119,7 +119,7 @@ const ListProvider = (props) => {
             },
           })
           .then(({ data }) => {
-            console.log("🚀 ~ file: useList.js:95 ~ data", data);
+            // console.log("🚀 ~ file: useList.js:95 ~ data", data);
             if (data.access_token) {
               setAccessToken(data.access_token);
             }

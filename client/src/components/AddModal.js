@@ -74,7 +74,7 @@ const AddModal = ({ open, onClose }) => {
           },
         })
         .then(({ data }) => {
-          console.log("🚀 ~ file: AddModal.js:75 ~ addIssue ~ data", data);
+          // console.log("🚀 ~ file: AddModal.js:75 ~ addIssue ~ data", data);
           if (data.message) console.log("Wrong Repo");
           else {
             setIssueArr((prev) => [data, ...prev]);

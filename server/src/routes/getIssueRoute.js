@@ -19,7 +19,7 @@ exports.GetIssue = async (req, res) => {
       return response.json();
     })
     .then((data) => {
-      console.log("🚀 ~ file: getIssueRoute.js:25 ~ .then ~ data", data);
+      // console.log("🚀 ~ file: getIssueRoute.js:25 ~ .then ~ data", data);
       res.json(data);
     })
     .catch((err) => {
@@ -47,7 +47,7 @@ exports.GetIssueSearch = async (req, res) => {
       return response.json();
     })
     .then((data) => {
-      console.log("🚀 ~ file: getIssueRoute.js:25 ~ .then ~ data", data);
+      // console.log("🚀 ~ file: getIssueRoute.js:25 ~ .then ~ data", data);
       res.json(data);
     })
     .catch((err) => {

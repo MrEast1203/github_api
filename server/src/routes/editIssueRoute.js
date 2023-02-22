@@ -29,7 +29,7 @@ exports.EditIssue = async (req, res) => {
       return response.json();
     })
     .then((data) => {
-      console.log("🚀 ~ file: editIssueRoute.js:37 ~ .then ~ data", data);
+      // console.log("🚀 ~ file: editIssueRoute.js:37 ~ .then ~ data", data);
       res.json(data);
     })
     .catch((err) => {
@@ -61,7 +61,7 @@ exports.DeleteIssue = async (req, res) => {
       return response.json();
     })
     .then((data) => {
-      console.log("🚀 ~ file: editIssueRoute.js:37 ~ .then ~ data", data);
+      // console.log("🚀 ~ file: editIssueRoute.js:37 ~ .then ~ data", data);
       res.json(data);
     })
     .catch((err) => {

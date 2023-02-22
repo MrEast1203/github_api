@@ -9,7 +9,7 @@ const InfiniteLoadComponent = (props) => {
   const handleScroll = useCallback(() => {
     const { scrollTop, scrollHeight, clientHeight } = node.current;
     if (scrollTop + clientHeight === scrollHeight) {
-      console.log("reached bottom hook in scroll component");
+      // console.log("reached bottom hook in scroll component");
       setUpdateIssue((prev) => !prev);
     } else {
     }
