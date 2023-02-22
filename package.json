@@ -6,7 +6,11 @@
   "author": "Kan <mreast1203@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "install:all": "cd client && yarn install && cd ../server && yarn install",
     "start": "cd client && yarn start",
-    "server": "cd server && yarn server"
+    "server": "cd server && yarn server",
+    "install:prod": "cd client && yarn install --freeze-lockfile && cd ../server && yarn install --freeze-lockfile",
+    "build": "cd client && yarn build",
+    "deploy": "cd server && yarn deploy"
   }
 }
